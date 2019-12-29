@@ -28,23 +28,7 @@ spring:
     # 必填，与数据库同名
     database: ${DATASOURCE_DATABASE:redis_manager}
     driver-class-name: org.hsqldb.jdbc.JDBCDriver
-    url: ${DATASOURCE_URL:jdbc:hsqldb:file:/data/redis_manager/redis_manager}
-    #hikari数据库连接池
-    hikari:
-      pool-name: redis-manager-hikaricp
-      # 最小空闲连接数量
-      minimum-idle: 10
-      # 空闲连接存活最大时间，默认600000（10分钟）
-      idle-timeout: 180000
-      # 连接池最大连接数，默认是10
-      maximum-pool-size: 50
-      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
-      auto-commit: true
-      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
-      max-lifetime: 600000
-      # 数据库连接超时时间,默认30秒，即30000
-      connection-timeout: 30000
-      connection-test-query: 'SELECT 1'
+    url: ${DATASOURCE_URL:jdbc:hsqldb:file:c:/kevin/redis_manager/redis_manager}
 
 mybatis:
   configuration:
@@ -67,7 +51,7 @@ redis-manager:
   # monitor configuration
   monitor:
     # 数据保存天数，1-30天, default: 15
-    data-keep-days: 15
+    data-keep-days: 30
     # slow log limit of one node, default: 20
     slow-log-limit: 100
   # installation configuration
@@ -88,4 +72,4 @@ redis-manager:
       images: redis:4.0.10,redis:4.0.14,redis:5.0.5
       humpback-host: http://%s:8500/dockerapi/v2/
   alert:
-    data-keep-days: 15
+    data-keep-days: 30

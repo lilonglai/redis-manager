@@ -46,7 +46,7 @@ public interface IGroupDao {
     @Update("UPDATE group2 SET group_name = #{groupName, jdbcType=VARCHAR}, group_info = #{groupInfo, jdbcType=VARCHAR}, update_time = current_timestamp WHERE group_id = #{groupId}")
     int updateGroup(Group group);
 
-    @Delete("DELETE FROM group WHERE group_id = #{groupId}")
+    @Delete("DELETE FROM group2 WHERE group_id = #{groupId}")
     int deleteGroupById(Integer groupId);
 
     @Select("create TABLE group2 (" +
