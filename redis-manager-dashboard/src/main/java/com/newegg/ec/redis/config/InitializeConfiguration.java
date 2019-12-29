@@ -65,16 +65,20 @@ public class InitializeConfiguration implements ApplicationListener<ContextRefre
     }
 
     private void createTables() {
-        groupDao.createGroupTable();
-        userDao.createUserTable();
-        groupUserDao.createGroupUserTable();
-        clusterDao.createClusterTable();
-        machineDao.createMachineTable();
-        alertChannelDao.createAlertChannelTable();
-        alertRuleDao.createAlertChannelTable();
-        alertRecordDao.createAlertRecordTable();
-        redisNodeDao.createRedisNodeTable();
-        operationLogDao.createLogTable();
+        try {
+            groupDao.createGroupTable();
+            userDao.createUserTable();
+            groupUserDao.createGroupUserTable();
+            clusterDao.createClusterTable();
+            machineDao.createMachineTable();
+            alertChannelDao.createAlertChannelTable();
+            alertRuleDao.createAlertChannelTable();
+            alertRecordDao.createAlertRecordTable();
+            redisNodeDao.createRedisNodeTable();
+            operationLogDao.createLogTable();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Transactional

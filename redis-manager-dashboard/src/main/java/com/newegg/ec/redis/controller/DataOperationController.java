@@ -3,12 +3,16 @@ package com.newegg.ec.redis.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.newegg.ec.redis.entity.*;
 import com.newegg.ec.redis.service.IClusterService;
+import com.newegg.ec.redis.service.IExecuteService;
 import com.newegg.ec.redis.service.IRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Jay.H.Zou
@@ -23,6 +27,9 @@ public class DataOperationController {
 
     @Autowired
     private IRedisService redisService;
+
+    @Autowired
+    private IExecuteService executeService;
 
     @RequestMapping(value = "/getDBList/{clusterId}", method = RequestMethod.GET)
     @ResponseBody
@@ -72,6 +79,17 @@ public class DataOperationController {
     public Result sendCommand(@RequestBody DataCommandsParam dataCommandsParam) {
         Cluster cluster = clusterService.getClusterById(dataCommandsParam.getClusterId());
         Object console = redisService.console(cluster, dataCommandsParam);
+        // 格式处理
+        if (console == null) {
+            return Result.failResult();
+        }
+        return Result.successResult(console);
+    }
+
+    @RequestMapping(value = "/executeCommand", method = RequestMethod.POST)
+    @ResponseBody
+    public Result executeCommand(@RequestBody DataCommandsParam dataCommandsParam) {
+        Object console = executeService.execute(dataCommandsParam);
         // 格式处理
         if (console == null) {
             return Result.failResult();

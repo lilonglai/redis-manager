@@ -18,34 +18,34 @@ public interface IGroupUserDao {
     @Select("SELECT * FROM group_user WHERE grant_group_id = #{grantGroupId} AND user_id = #{userId}")
     User isGranted(@Param("grantGroupId") Integer grantGroupId, @Param("userId") Integer userId);
 
-    @Insert("INSERT INTO `group_user` (group_id, user_id, user_role, grant_group_id, update_time) " +
-            "VALUES (#{user.groupId}, #{user.userId}, #{user.userRole}, #{grantGroupId}, NOW())")
+    @Insert("INSERT INTO group_user (group_id, user_id, user_role, grant_group_id, update_time) " +
+            "VALUES (#{user.groupId}, #{user.userId}, #{user.userRole}, #{grantGroupId}, current_timestamp)")
     int insertGroupUser(@Param("user") User user, @Param("grantGroupId") Integer grantGroupId);
 
-    @Update("UPDATE `group_user` " +
+    @Update("UPDATE group_user " +
             "SET user_role = #{userRole} " +
             "WHERE group_id = #{groupId} " +
             "AND grant_group_id = #{groupId} " +
             "AND user_id = #{userId}")
     int updateUserRole(User user);
 
-    @Delete("DELETE FROM `group_user` WHERE grant_group_id = #{grantGroupId} AND user_id = #{userId}")
+    @Delete("DELETE FROM group_user WHERE grant_group_id = #{grantGroupId} AND user_id = #{userId}")
     int deleteGroupUserByGrantGroupId(@Param("grantGroupId") Integer grantGroupId, @Param("userId") Integer userId);
 
-    @Delete("DELETE FROM `group_user` WHERE user_id = #{userId}")
+    @Delete("DELETE FROM group_user WHERE user_id = #{userId}")
     int deleteGroupUserByUserId(@Param("userId") Integer userId);
 
-    @Select("create TABLE IF NOT EXISTS `group_user`( " +
-            "group_user_id integer(4) NOT NULL AUTO_INCREMENT, " +
-            "group_id integer(4) NOT NULL, " +
-            "user_id integer(4) NOT NULL, " +
-            "grant_group_id integer(4) NOT NULL, " +
-            "user_role varchar(20) NOT NULL, " +
+    @Select("create TABLE group_user( " +
+            "group_user_id integer NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 100, INCREMENT BY 1), " +
+            "group_id integer NOT NULL, " +
+            "user_id integer NOT NULL, " +
+            "grant_group_id integer NOT NULL, " +
+            "user_role integer NOT NULL, " +
             "allowed_urls varchar(255) DEFAULT NULL, " +
             "grant_clusters varchar(255) DEFAULT NULL, " +
-            "update_time datetime(0) NOT NULL, " +
+            "update_time timestamp NOT NULL, " +
             "PRIMARY KEY (group_user_id), " +
-            "UNIQUE KEY `group_user` (user_id, group_id, grant_group_id, user_role) " +
-            ") ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;")
+            "UNIQUE (user_id, group_id, grant_group_id, user_role) " +
+            ")")
     void createGroupUserTable();
 }

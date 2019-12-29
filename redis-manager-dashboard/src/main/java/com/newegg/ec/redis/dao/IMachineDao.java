@@ -35,7 +35,7 @@ public interface IMachineDao {
     List<Machine> selectMachineByHost(@Param("groupId") Integer groupId, @Param("host") String host);
 
     @Update("UPDATE machine SET machine_group_name = #{machineGroupName}, host = #{host}, ssh_port = #{sshPort}, password = #{password}, " +
-            "token = #{token}, machine_type = #{machineType}, machine_info = #{machineInfo}, update_time = NOW() " +
+            "token = #{token}, machine_type = #{machineType}, machine_info = #{machineInfo}, update_time = current_timestamp " +
             "WHERE machine_id = #{machineId}")
     int updateMachine(Machine machine);
 
@@ -43,7 +43,7 @@ public interface IMachineDao {
             "INSERT INTO machine (machine_group_name, group_id, host, ssh_port, user_name, password, token, machine_type, machine_info, update_time) " +
             "VALUES <foreach item='machine' collection='machineList' separator=','>" +
             "(#{machine.machineGroupName}, #{machine.groupId}, #{machine.host}, #{machine.sshPort}, #{machine.userName}, #{machine.password}, " +
-            "#{machine.token}, #{machine.machineType}, #{machine.machineInfo}, NOW())" +
+            "#{machine.token}, #{machine.machineType}, #{machine.machineInfo}, current_timestamp)" +
             "</foreach>" +
             "</script>")
     int insertMachine(@Param("machineList") List<Machine> machineList);
@@ -59,20 +59,20 @@ public interface IMachineDao {
             "</script>")
     int deleteMachineByIdBatch(@Param("machineIdList") List<Integer> machineIdList);
 
-    @Select("create TABLE IF NOT EXISTS `machine`( " +
-            "machine_id integer(4) NOT NULL AUTO_INCREMENT, " +
+    @Select("create TABLE machine( " +
+            "machine_id integer NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 100, INCREMENT BY 1), " +
             "machine_group_name varchar(255) NOT NULL, " +
-            "group_id integer(4) NOT NULL, " +
+            "group_id integer NOT NULL, " +
             "host varchar(50) NOT NULL, " +
-            "ssh_port integer(4) NOT NULL, " +
+            "ssh_port integer NOT NULL, " +
             "user_name varchar(50) NOT NULL, " +
             "password varchar(255) DEFAULT NULL, " +
             "token varchar(255) DEFAULT NULL, " +
-            "machine_type integer(2) DEFAULT NULL, " +
+            "machine_type integer DEFAULT NULL, " +
             "machine_info varchar(255) DEFAULT NULL, " +
-            "update_time datetime(0) NOT NULL, " +
+            "update_time timestamp NOT NULL, " +
             "PRIMARY KEY (machine_id) " +
-            ") ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;")
+            ")")
     void createMachineTable();
 
 }

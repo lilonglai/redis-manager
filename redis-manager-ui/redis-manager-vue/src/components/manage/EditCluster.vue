@@ -49,7 +49,7 @@
 
 <script>
 import { store } from "@/vuex/store.js";
-import { isEmpty, validateIpAndPort } from "@/utils/validate.js";
+import { isEmpty, validateIpAndPort, validateHostAndPort } from "@/utils/validate.js";
 import API from "@/api/api.js";
 import { getClusterById } from "@/components/cluster/cluster.js";
 import message from "@/utils/message.js";
@@ -94,7 +94,7 @@ export default {
       if (isEmpty(value) || isEmpty(value.trim())) {
         return callback(new Error("Please enter redis node"));
       } else {
-        if (!validateIpAndPort(value)) {
+        if (!validateHostAndPort(value)) {
           return callback(new Error("Incorrect format"));
         }
         callback();

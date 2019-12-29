@@ -30,13 +30,13 @@ public interface IRedisNodeDao {
             "VALUES " +
             "<foreach item='redisNode' collection='redisNodeList' separator=','>" +
             "(#{redisNode.groupId}, #{redisNode.clusterId}, #{redisNode.nodeId}, #{redisNode.masterId}, #{redisNode.host}, #{redisNode.port}, #{redisNode.nodeRole}, " +
-            "#{redisNode.flags}, #{redisNode.linkState}, #{redisNode.slotRange}, #{redisNode.slotNumber}, #{redisNode.containerId}, #{redisNode.containerName}, NOW(), NOW())" +
+            "#{redisNode.flags}, #{redisNode.linkState}, #{redisNode.slotRange}, #{redisNode.slotNumber}, #{redisNode.containerId}, #{redisNode.containerName}, current_timestamp, current_timestamp)" +
             "</foreach>" +
             "</script>")
     int insertRedisNodeList(@Param("redisNodeList") List<RedisNode> redisNodeList);
 
     @Update("UPDATE redis_node SET master_id = #{masterId}, node_role = #{nodeRole}, flags = #{flags}, " +
-            "link_state = #{linkState}, slot_range = #{slotRange}, update_time = NOW()")
+            "link_state = #{linkState}, slot_range = #{slotRange}, update_time = current_timestamp")
     int updateRedisNode(RedisNode redisNode);
 
     @Delete("DELETE FROM redis_node WHERE cluster_id = #{clusterId}")
@@ -45,25 +45,25 @@ public interface IRedisNodeDao {
     @Delete("DELETE FROM redis_node WHERE redis_node_id = #{redisNodeId}")
     int deleteRedisNodeById(Integer redisNodeId);
 
-    @Select("CREATE TABLE IF NOT EXISTS redis_node ( " +
-            "`redis_node_id` integer(4) NOT NULL AUTO_INCREMENT, " +
-            "`group_id` integer(4) NOT NULL, " +
-            "`cluster_id` integer(4) NOT NULL, " +
-            "`node_id` varchar(50) DEFAULT NULL, " +
-            "`master_id` varchar(50) DEFAULT NULL, " +
-            "`host` varchar(50) NOT NULL, " +
-            "`port` integer(4) NOT NULL, " +
-            "`node_role` varchar(50) DEFAULT NULL, " +
-            "`flags` varchar(50) DEFAULT NULL, " +
-            "`link_state` varchar(50) DEFAULT NULL, " +
-            "`slot_range` varchar(50) DEFAULT NULL, " +
-            "`slot_number` integer(4) DEFAULT NULL, " +
-            "`container_id` varchar(255) DEFAULT NULL, " +
-            "`container_name` varchar(60) DEFAULT NULL, " +
-            "`insert_time` datetime(0) NOT NULL, " +
-            "`update_time` datetime(0) NOT NULL, " +
+    @Select("CREATE TABLE redis_node ( " +
+            "redis_node_id integer NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 100, INCREMENT BY 1), " +
+            "group_id integer NOT NULL, " +
+            "cluster_id integer NOT NULL, " +
+            "node_id varchar(50) DEFAULT NULL, " +
+            "master_id varchar(50) DEFAULT NULL, " +
+            "host varchar(50) NOT NULL, " +
+            "port integer NOT NULL, " +
+            "node_role varchar(50) DEFAULT NULL, " +
+            "flags varchar(50) DEFAULT NULL, " +
+            "link_state varchar(50) DEFAULT NULL, " +
+            "slot_range varchar(50) DEFAULT NULL, " +
+            "slot_number integer DEFAULT NULL, " +
+            "container_id varchar(255) DEFAULT NULL, " +
+            "container_name varchar(60) DEFAULT NULL, " +
+            "insert_time timestamp NOT NULL, " +
+            "update_time timestamp NOT NULL, " +
             "PRIMARY KEY (redis_node_id) " +
-            ") ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;")
+            ")")
     void createRedisNodeTable();
 
 }

@@ -14,6 +14,7 @@ import GroupManage from '@/components/group/GroupManage'
 import UserManage from '@/components/user/UserManage'
 import Profile from '@/components/user/Profile'
 import DataOperation from '@/components/tool/DataOperation'
+import SystemOperation from '@/components/tool/SystemOperation'
 import NotFound from '@/components/error/404'
 import EditHistory from '@/components/history/EditHistory'
 
@@ -102,6 +103,11 @@ const router = new Router({
           name: 'data-operation',
           path: '/data-operation/group/:groupId',
           component: DataOperation
+        },
+        {
+          name: 'system-operation',
+          path: '/system-operation/group/:groupId',
+          component: SystemOperation
         }
       ]
     },

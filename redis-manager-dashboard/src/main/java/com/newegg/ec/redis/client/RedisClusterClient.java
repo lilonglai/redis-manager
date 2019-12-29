@@ -6,6 +6,7 @@ import com.newegg.ec.redis.entity.AutoCommandResult;
 import com.newegg.ec.redis.entity.DataCommandsParam;
 import com.newegg.ec.redis.util.RedisUtil;
 import com.newegg.ec.redis.util.SignUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
@@ -31,6 +32,9 @@ public class RedisClusterClient implements IRedisClusterClient {
     public RedisClusterClient(RedisURI redisURI) {
         Set<HostAndPort> hostAndPortSet = redisURI.getHostAndPortSet();
         String redisPassword = redisURI.getRequirePass();
+        if(StringUtils.isEmpty(redisPassword)){
+            redisPassword = null;
+        }
         jedisCluster = new JedisCluster(hostAndPortSet, TIMEOUT, TIMEOUT, MAX_ATTEMPTS, redisPassword, new GenericObjectPoolConfig());
         redisClient = RedisClientFactory.buildRedisClient(redisURI);
     }

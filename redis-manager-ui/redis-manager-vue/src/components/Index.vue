@@ -120,6 +120,11 @@
                     @click="toDataOperation()"
                     v-if="currentUser.userRole < 2"
                   >Data Operation</el-menu-item>
+                  <el-menu-item
+                    index="5-2"
+                    @click="toSystemOperation()"
+                    v-if="currentUser.userRole < 2"
+                  >System Operation</el-menu-item>
                   <!-- <el-menu-item index="5-2">Other</el-menu-item> -->
                 </el-menu-item-group>
               </el-submenu>
@@ -295,6 +300,12 @@ export default {
     toDataOperation() {
       this.$router.push({
         name: "data-operation",
+        params: { groupId: this.selectGroupId }
+      });
+    },
+    toSystemOperation() {
+      this.$router.push({
+        name: "system-operation",
         params: { groupId: this.selectGroupId }
       });
     },

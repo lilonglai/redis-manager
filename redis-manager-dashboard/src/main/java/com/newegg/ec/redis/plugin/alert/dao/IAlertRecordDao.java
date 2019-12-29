@@ -22,7 +22,7 @@ public interface IAlertRecordDao {
             "VALUES " +
             "<foreach item='alertRecord' collection='alertRecordList' separator=','>" +
             "(#{alertRecord.groupId}, #{alertRecord.clusterAlert}, #{alertRecord.groupName}, #{alertRecord.clusterId}, #{alertRecord.clusterName}, #{alertRecord.ruleId}, #{alertRecord.redisNode}, " +
-            "#{alertRecord.alertRule}, #{alertRecord.actualData}, #{alertRecord.checkCycle}, #{alertRecord.ruleInfo}, NOW())" +
+            "#{alertRecord.alertRule}, #{alertRecord.actualData}, #{alertRecord.checkCycle}, #{alertRecord.ruleInfo}, current_timestamp)" +
             "</foreach>" +
             "</script>")
     int insertAlertRecordBatch(@Param("alertRecordList") List<AlertRecord> alertRecordList);
@@ -44,21 +44,21 @@ public interface IAlertRecordDao {
     @Delete("DELETE FROM alert_record WHERE update_time <= #{oldestTime}")
     int deleteAlertRecordByTime(Timestamp oldestTime);
 
-    @Select("create TABLE IF NOT EXISTS `alert_record` (" +
-            "record_id integer(4) NOT NULL AUTO_INCREMENT, " +
-            "group_id integer(4) NOT NULL, " +
-            "cluster_alert tinyint(1) NOT NULL DEFAULT '0', " +
+    @Select("create TABLE alert_record (" +
+            "record_id integer NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 100, INCREMENT BY 1), " +
+            "group_id integer NOT NULL, " +
+            "cluster_alert smallint DEFAULT 0, " +
             "group_name varchar(255) NOT NULL, " +
-            "cluster_id integer(4) NOT NULL, " +
+            "cluster_id integer NOT NULL, " +
             "cluster_name varchar(255) NOT NULL, " +
-            "rule_id integer(4) NOT NULL, " +
+            "rule_id integer NOT NULL, " +
             "redis_node varchar(50) NOT NULL, " +
             "alert_rule varchar(50) NOT NULL, " +
             "actual_data varchar(50) NOT NULL, " +
-            "check_cycle integer(4) NOT NULL, " +
+            "check_cycle integer NOT NULL, " +
             "rule_info varchar(255) DEFAULT NULL, " +
-            "update_time datetime(0) NOT NULL, " +
+            "update_time timestamp NOT NULL, " +
             "PRIMARY KEY (record_id) " +
-            ") ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;")
+            ")")
     void createAlertRecordTable();
 }

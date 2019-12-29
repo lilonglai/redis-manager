@@ -59,6 +59,12 @@ export function validateIpAndPort (ipAndPort) {
   return reg.test(ipAndPort)
 }
 
+export function validateHostAndPort (hostAndPort) {
+  //const reg = /^\\s*(.*?):(\\d+)\\s*$/
+  //return reg.test(hostAndPort)
+  return true
+}
+
 export function validateIp (ip) {
   const reg = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
   return reg.test(ip)

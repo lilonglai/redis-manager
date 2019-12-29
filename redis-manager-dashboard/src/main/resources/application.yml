@@ -27,10 +27,8 @@ spring:
   datasource:
     # 必填，与数据库同名
     database: ${DATASOURCE_DATABASE:redis_manager}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/redis_manager?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2b8}
-    username: ${DATASOURCE_USERNAME:root}
-    password: ${DATASOURCE_PASSWORD:xxx}
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    url: ${DATASOURCE_URL:jdbc:hsqldb:file:/data/redis_manager/redis_manager}
     #hikari数据库连接池
     hikari:
       pool-name: redis-manager-hikaricp
